@@ -1,0 +1,89 @@
+/* Styles for the TableFilterComponent */
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.filter-input {
+  width: 100%;
+}
+
+.filter-menu { 
+  width: 100%;
+}
+
+.filter-form {
+  padding: 16px;
+}
+
+.menu-item {
+  margin-bottom: 16px;
+}
+
+.column-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-field {
+  width: 100%;
+}
+
+.checkbox-group,
+.radio-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.checkbox-options {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.checkbox-options mat-checkbox {
+  width: 45%;
+  margin-right: 5%;
+  margin-bottom: 8px;
+}
+
+.mat-chip {
+  max-width: 100%;
+  white-space: normal;
+}
+
+.mat-chip .mat-icon {
+  margin-left: 8px;
+}
+
+@media (max-width: 600px) {
+  .filter-menu {
+    width: 100vw;
+  }
+}
+/* Existing styles... */
+
+.filters-flex {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* Space between flex items */
+  padding: 16px; /* Optional: Add padding around the flex container */
+}
+
+.filter-item {
+  flex: 1 1 200px; /* Grow, shrink, basis */
+}
+
+.column-group {
+  display: flex;
+  flex-direction: column;
+}
+
+
+
+
+::ng-deep {  
+  .mat-mdc-menu-panel {  
+    max-width: 600px !important;  
+  }  
+}

@@ -1,0 +1,174 @@
+<div class="filter-container" *ngIf="filterForm" [formGroup]="filterForm">
+  <mat-form-field appearance="outline" class="filter-input">
+    <mat-label>Filter by</mat-label>
+    <input
+      matInput
+      [matMenuTriggerFor]="menu"
+      readonly
+      placeholder="Click to set filters..."
+    />
+    <mat-chip-listbox aria-label="Filter chips">
+      <mat-chip
+        *ngFor="let filter of activeFilters"
+        [removable]="true"
+        (removed)="removeFilter(filter)"
+      >
+        {{ filter.column }}: {{ filter.value | json }}
+        <button matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip>
+    </mat-chip-listbox>
+  </mat-form-field>
+
+  <mat-menu #menu="matMenu" class="filter-menu custom-menu">
+    <form [formGroup]="filterForm" class="filter-form">
+      <div class="filters-flex">
+      <div
+        *ngFor="let column of columns"
+        class="menu-item"
+        (click)="$event.stopPropagation()"
+      >
+        <div [formGroupName]="column.name" class="column-group">
+          <mat-slide-toggle
+            color="primary"
+            formControlName="enabled"
+            (change)="onToggleChange(column.name)"
+          >
+          </mat-slide-toggle>
+          <!-- Text Input -->
+          <mat-form-field
+            *ngIf="column.type === 'text'"
+            appearance="outline"
+            class="input-field"
+          >
+            <mat-label>{{ column.name }}</mat-label>
+            <input
+              matInput
+              formControlName="value"
+              placeholder="Enter text"
+              [disabled]="!filterForm.get(column.name + '.enabled').value"
+            />
+            <mat-error
+              *ngIf="
+                filterForm.get(column.name + '.value').hasError('required')
+              "
+            >
+              This field is required
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Number Input -->
+          <mat-form-field
+            *ngIf="column.type === 'number'"
+            appearance="outline"
+            class="input-field"
+          >
+            <mat-label>{{ column.name }}</mat-label>
+            <input
+              matInput
+              type="number"
+              formControlName="value"
+              placeholder="Enter number"
+              [disabled]="!filterForm.get(column.name + '.enabled').value"
+            />
+            <mat-error
+              *ngIf="filterForm.get(column.name + '.value').hasError('pattern')"
+            >
+              Must be a number
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Date Picker -->
+          <mat-form-field
+            *ngIf="column.type === 'date'"
+            appearance="outline"
+            class="input-field"
+          >
+            <mat-label>{{ column.name }}</mat-label>
+            <input
+              matInput
+              [matDatepicker]="picker"
+              formControlName="value"
+              placeholder="Choose a date"
+              [disabled]="!filterForm.get(column.name + '.enabled').value"
+            />
+            <mat-datepicker-toggle
+              matSuffix
+              [for]="picker"
+            ></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <!-- Select Dropdown -->
+          <mat-form-field
+            *ngIf="column.type === 'select'"
+            appearance="outline"
+            class="input-field"
+          >
+            <mat-label>{{ column.name }}</mat-label>
+            <mat-select
+              formControlName="value"
+              [disabled]="!filterForm.get(column.name + '.enabled').value"
+            >
+              <mat-option
+                *ngFor="let option of column.dataSource"
+                [value]="option.id"
+              >
+                {{ option.textualValue }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <!-- Checkboxes -->
+          <div
+            *ngIf="column.type === 'checkboxes'"
+            [formGroupName]="'value'"
+            class="checkbox-group"
+          >
+            <label>{{ column.name }}</label>
+            <div class="checkbox-options">
+              <mat-checkbox
+                color="primary"
+                *ngFor="let option of column.dataSource"
+                [formControlName]="option.id"
+                [disabled]="!filterForm.get(column.name + '.enabled').value"
+              >
+                {{ option.textualValue }}
+              </mat-checkbox>
+            </div>
+          </div>
+
+          <!-- Radio Buttons -->
+          <div *ngIf="column.type === 'radio'" class="radio-group">
+            <label>{{ column.name }}</label>
+            <mat-radio-group
+              formControlName="value"
+              [disabled]="!filterForm.get(column.name + '.enabled').value"
+            >
+              <mat-radio-button
+                *ngFor="let option of column.dataSource"
+                [value]="option.id"
+              >
+                {{ option.textualValue }}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+
+          <!-- Boolean Checkbox -->
+          <mat-checkbox
+            *ngIf="column.type === 'boolean'"
+            formControlName="value"
+            [disabled]="!filterForm.get(column.name + '.enabled').value"
+          >
+            {{ column.name }}
+          </mat-checkbox>
+        </div>
+      </div>
+    </div>
+    </form>
+    <button mat-menu-item (click)="applyFilters(); menuTrigger.closeMenu()">
+      Apply Filters
+    </button>
+  </mat-menu>
+</div>

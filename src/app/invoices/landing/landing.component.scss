@@ -1,0 +1,104 @@
+.sidenav-container,
+.full-height {
+  height: 100% !important;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.mat-sidenav {
+  width: 200px;
+}
+
+.table-controls,
+.nav-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.nav-section span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.config-title {
+  flex-grow: 1;
+  text-align: right;
+  margin-right: 20px;
+}
+
+.mat-elevation-z8 {
+  box-shadow: 0 6px 10px -1px rgba(0, 0, 0, 0.2);
+}
+
+.sub-list-item {
+  padding: 5px 10px; // Reduces padding, adjust values as necessary
+  word-wrap: break-word;
+  word-break: break-all;
+  border-bottom: 1px solid #e0e0e0; // Optional, adds a separator
+
+  .list-item-content {
+    flex: 1; // Ensures content uses the available space
+    white-space: wrap; // Keeps the text on one line
+    overflow: hidden; // Prevents overflow
+    text-overflow: ellipsis; // Adds ellipsis if text overflows
+  }
+}
+
+.mat-nav-list {
+  padding: 0; // Removes padding within the list for tighter spacing
+}
+
+.side-nav-width {
+  width: 280px;
+}
+
+.sidenav-container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  overflow: hidden; // Ensures no overflow of the container
+}
+
+mat-sidenav {
+  width: 280px; // Set the fixed width of the sidenav
+  flex-shrink: 0; // Prevents the sidenav from shrinking
+}
+
+mat-sidenav-content {
+  flex-grow: 1; // Takes up the remaining space
+  overflow: auto; // Adds scroll if content exceeds the height
+}
+
+::ng-deep.mat-table {
+  height: 500px !important;
+}
+
+.fixed-height-table {
+  min-height: calc(
+    48px * 7
+  ); /* Adjust the row height based on your actual row height */
+  width: 100%;
+}
+
+.table-container {
+  overflow: auto; /* Allows scrolling within the container if necessary */
+}
+/* Scoped within your component's CSS to avoid global style bleeding */
+:host ::ng-deep .mat-row, 
+:host ::ng-deep .mat-header-row {
+  height: 48px !important; /* Ensure this is not overridden elsewhere */
+  min-height: 48px !important;
+  max-height: 48px !important;
+}
+
+:host ::ng-deep .mat-cell, 
+:host ::ng-deep .mat-header-cell {
+  padding: 8px 24px; /* Adjust padding as needed */
+  box-sizing: border-box; /* Ensures padding is included in the height calculation */
+  line-height: 32px; /* This should fit within the 48px row height */
+}

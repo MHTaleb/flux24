@@ -1,0 +1,96 @@
+<!-- landing.component.html -->
+<mat-sidenav-container
+  *ngIf="vm$ | async as vm"
+  class="sidenav-container full-height"
+>
+  <mat-sidenav
+    mode="side"
+    opened="true"
+    position="start"
+    class="full-height side-nav-width"
+  >
+    <mat-nav-list>
+      <mat-list-item>Operations</mat-list-item>
+      <mat-list-item class="full-height">
+        <span>Reports</span>
+        <mat-nav-list
+          class="full-height"
+          *ngIf="tableConfigService.tableConfigs.length > 0"
+        >
+          <mat-list-item
+            class="sub-list-item"
+            *ngFor="
+              let config of tableConfigService.tableConfigs;
+              let i = index
+            "
+            (click)="selectTable(config.name)"
+          >
+            <div class="list-item-content">
+              {{ config.name }}
+            </div>
+          </mat-list-item>
+        </mat-nav-list>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-sidenav>
+  <mat-sidenav-content class="full-width">
+    <div class="table-controls">
+      <div class="nav-section">
+        <span (click)="selectTable(vm.previousDatasourceName)">
+          {{ vm.previousDatasourceName }}
+          <button mat-icon-button>
+            <mat-icon>arrow_back</mat-icon>
+          </button>
+        </span>
+        <span (click)="selectTable(vm.nextDatasourceName)">
+          <button mat-icon-button>
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+          {{ vm.nextDatasourceName }}
+        </span>
+      </div>
+      <!-- Example usage in another component template -->
+
+      <h2 class="config-title">{{ vm.currentConf.name }}</h2>
+    </div>
+    <div class="table-container" *ngIf="vm.datasource">
+      <div style="padding: 0px 17px 0px 17px">
+        <app-table-filter
+          *ngIf="!!vm.datasource && !!vm.currentConf.displayedColumns"
+          [columns]="vm.currentConf.displayedColumns"
+          (onFiltersSet)="handleFilterSet($event)"
+        ></app-table-filter>
+      </div>
+
+      <div style="padding: 0px 17px 0px 17px">
+        <table
+          mat-table
+          [dataSource]="vm.datasource"
+          matSort
+          class="mat-elevation-z8 full-width fixed-height-table"
+        >
+          <ng-container
+            *ngFor="let column of vm.currentConf.displayedColumns"
+            [matColumnDef]="column.name"
+          >
+            <th mat-header-cell *matHeaderCellDef>
+              {{ vm.currentConf.columnDefinitions[column.name] }}
+            </th>
+            <td mat-cell *matCellDef="let element">
+              {{ element[column.name] }}
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="vm.displayColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: vm.displayColumns"></tr>
+        </table>
+
+        <mat-paginator
+          [pageSize]="7"
+          [pageSizeOptions]="[7]"
+          showFirstLastButtons
+        ></mat-paginator>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
